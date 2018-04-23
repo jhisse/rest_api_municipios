@@ -137,7 +137,7 @@ func addV1Routes(router *mux.Router) {
 
 func main() {
 
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(true)
 	api := r.PathPrefix("/api").Subrouter()
 	v1 := api.PathPrefix("/v1").Subrouter()
 
