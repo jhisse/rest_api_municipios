@@ -97,10 +97,12 @@ func init() {
 }
 
 func getUFs(w http.ResponseWriter, r *http.Request) {
+	headerJson(w)
 	json.NewEncoder(w).Encode(UnidadesFederativas)
 }
 
 func getUFsPorCodigo(w http.ResponseWriter, r *http.Request) {
+	headerJson(w)
 	params := mux.Vars(r)
 	for _, uf := range UnidadesFederativas {
 		if strconv.Itoa(uf.CodigoUF) == params["codigo"] {
@@ -112,10 +114,12 @@ func getUFsPorCodigo(w http.ResponseWriter, r *http.Request) {
 }
 
 func getMunicipios(w http.ResponseWriter, r *http.Request) {
+	headerJson(w)
 	json.NewEncoder(w).Encode(&Municipios)
 }
 
 func getMunicipiosPorCodigo(w http.ResponseWriter, r *http.Request) {
+	headerJson(w)
 	params := mux.Vars(r)
 	for _, municipio := range Municipios {
 		if strconv.Itoa(municipio.CodigoMunicipio) == params["codigo"] {
@@ -126,13 +130,15 @@ func getMunicipiosPorCodigo(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(nil)
 }
 
+func headerJson(w http.ResponseWriter)  {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+}
+
 func addV1Routes(router *mux.Router) {
 	router.HandleFunc("/unidadesFederativas", getUFs).Methods("GET")
 	router.HandleFunc("/unidadesFederativas/{codigo:[0-9]{2}}", getUFsPorCodigo).Methods("GET")
 	router.HandleFunc("/municipios", getMunicipios).Methods("GET")
 	router.HandleFunc("/municipios/{codigo:[0-9]{7}}", getMunicipiosPorCodigo).Methods("GET")
-
-	router.Headers("Content-Type", "application/json")
 }
 
 func main() {
